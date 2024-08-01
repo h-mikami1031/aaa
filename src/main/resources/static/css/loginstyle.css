@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+.center {
+	text-align: center;
+	padding-top: 150px;
+}
+
+.center * {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.text {
+	border: none;
+	outline: none;
+}
+
+#fieldtext {
+	border-width: thin;
+	border-style: solid;
+	width: 200px;
+
+}
+
+.error {
+	color: rgb(255, 0, 0);
+}
+
+table {
+	border-spacing: 0px 20px;
+	margin-bottom: 40px;
+}
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+	-moz-appearance: textfield;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+  <!-- ログインメッセージ -->
+  <div th:fragment="login">
+    <div class="alert alert-danger" th:if="${param.error}">
+      <small>社員番号またはパスワードが正しくありません</small>
+    </div>
+    <div class="alert alert-success" th:if="${param.logout}">
+      <small>ログアウトしました</small>
+    </div>
+  </div>
+  
+  <!-- ユーザー管理メッセージ -->
+  <div th:fragment="user">
+    <div class="alert alert-danger" th:if="${paramErrorusercreate== true}">
+      <small>この社員番号は既に使用されています</small>
+    </div>
+     <div class="alert alert-danger" th:if="${paramErrorpass == true}">
+      <small>パスワードが違います</small>
+    </div>
+    <div class="alert alert-success" th:if="${paramCreateSuccess == true}">
+      <small>ユーザを新規登録しました</small>
+    </div>
+    <div class="alert alert-success" th:if="${paramEditSuccess == true}">
+      <small>ユーザー情報を更新しました</small>
+    </div>
+    <div class="alert alert-danger" th:if="${paramErroruser == true}">
+      <small>社員番号またはパスワードが正しくありません</small>
+    </div>
+  </div>
+  </div>
+  
+
+  <!-- エラーメッセージ(404 Not Foundなど) -->
+  <div th:fragment="error">
+    <div class="text-center">
+      <div class="display-1" th:text="${status}"></div>
+      <div class="text-muted mb-4" th:text="${error}"></div>
+
+      <div class="text-muted">ページを表示できません</div>
+      <a th:href="@{/}">&larr; ホームに戻る</a>
+    </div>
+  </div>
+
+</body>
+</html>

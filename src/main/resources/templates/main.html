@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>受講報告書兼実行宣言シート</title>
+	<link th:href="@{/css/mainStyle.css}" rel="stylesheet" type="text/css">
+	<script src="http://code.jquery.com/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+	<script th:src="@{/js/main.js}" type="text/javascript"></script>
+
+</head>
+
+<body>
+	<!-- サイドバーの表示 -->
+	<div layout:fragment="sidebar" th:replace="~{fragments/sidebar :: sidebar}">
+	</div>
+	
+	<!-- コンテンツの表示 -->
+	<main layout:fragment="content" class="offcanvas-outside bg-light">
+		<form action="/main" method="post" th:object="${ReportData}" onsubmit="return submitForm();">
+
+			<!-- バックエンド側で使用するデータを非表示にしてHTML側に持たせている部分 -->
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input type="hidden" name="user_id" th:value="${user_id}" />
+			<input type="hidden" name="loginname" th:value="${loginname}" />
+			<input type="hidden" name="user_name" th:value="${user_name}" />
+			<input type="hidden" name="insertflag" th:value="${insertflag}" />
+			<input type="hidden" name="fileid" th:value="${fileid}" />
+			<input type="hidden" name="created" th:value="${created}" />
+			<input type="hidden" name="adminflag" id="adminflag" th:value="${adminflag}" />
+
+			<div class="container-fluid">
+				<!-- トグルボタン -->
+				<div layout:fragment="toggler" th:replace="~{fragments/sidebar :: toggler}">
+				</div>
+
+				<div class="row">
+					<div class="col">
+
+						<!-- アコーディオンパネル -->
+						<div class="accordion" id="accordionExample">
+
+							<div class="accordion-item">
+
+								<h2 class="accordion-header card" id="headingTwo">
+									<button class="accordion-button collapsed text-navy shadow background2"
+										type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+										aria-expanded="false" aria-controls="collapseTwo">
+										報告書検索
+									</button>
+								</h2>
+
+								<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+									data-bs-parent="#accordionExample">
+
+									<div class="accordion-body center">
+										<p>
+											<span th:if="${display == true}" class="margin-left">社員番号：</span><input
+												class="margin-right" id="userid" type="text" th:if="${display == true}"
+												oninput="value = value.replace(/[^0-9]+/i,'');" placeholder="社員番号を入力" onkeydown="disableEnterKey(event)">
+											<span th:if="${display == true}" class="margin-left">氏名：</span><input
+												class="margin-right" id="username" type="text"
+												th:if="${display == true}" placeholder="ユーザー名を入力" onkeydown="disableEnterKey(event)">
+											<span class="margin-left">研修名：</span><input class="margin-right"
+												id="subject" type="text" placeholder="研修名を入力" onkeydown="disableEnterKey(event)">
+										</p>
+										<p>
+											研修参加日：<input type="date" id="fromattendance" onkeydown="disableEnterKey(event)">~<input type="date"
+												id="toattendance" onkeydown="disableEnterKey(event)">
+											<span class="margin-left">チェック予定日：</span><input type="date"
+												id="fromcheck_day" onkeydown="disableEnterKey(event)">~<input type="date" id="tocheck_day" onkeydown="disableEnterKey(event)">
+										</p>
+										<p>
+											<input id="button" type="button" value="検索" class="btn btn-outline-primary">
+											<input type="button" value="すべて表示" id="button2"
+												class="btn btn-outline-dark margin-left">
+										</p>
+
+										<div class="overflow-auto">
+											<div class="table-container custom-table-container">
+												<table class="table table-bordered center" id="data-table">
+													<thead class="sticky-top background2">
+														<tr>
+															<th th:if="${display == true}">社員番号</th>
+															<th th:if="${display == true}">氏名</th>
+															<th>研修参加日</th>
+															<th>研修名</th>
+															<th>チェック予定日</th>
+															<th>登録日</th>
+															<th>更新日</th>
+															<th>報告書データ取得</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr th:each="attendanceList : ${attendanceList}">
+															<td th:text="${attendanceList.user_id}"
+																th:if="${display == true}"></td>
+															<td th:text="${attendanceList.user_name}"
+																th:if="${display == true}"></td>
+															<td th:text="${attendanceList.attendance}"></td>
+															<td th:text="${attendanceList.subject}"></td>
+															<td th:text="${attendanceList.check_day}"></td>
+															<td th:text="${attendanceList.created}"></td>
+															<td th:text="${attendanceList.modified}"></td>
+															<td><a
+																	th:href="@{http://localhost:8080/main(fileid=${attendanceList.fileid})}">データ表示</a>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card shadow margin-top">
+							<div class="card-header">
+								<h6 class="text-navy my-2">
+									Biz研修報告書
+								</h6>
+							</div>
+
+							<div class="card-body table-responsive">
+								<table class="table table-bordered center">
+									<td class="background">研修参加日</td>
+									<td><input type="date" name="attendance" id="attendance" onkeydown="disableEnterKey(event)"
+											th:value="${(ReportData?.attendance != null) ? ReportData.attendance : ''}" />
+									</td>
+									<td class="background">研修名</td>
+									<td><textarea name="subject" id="subjectName" cols="120"
+											th:text="${(ReportData?.subject != null) ? ReportData.subject : ''}"
+											spellcheck="false"></textarea></td>
+									<td class="background">氏名</td>
+									<td name="user_name" th:text="${user_name}"></td>
+								</table>
+
+								<table class="table table-bordered center">
+									<caption>研修の感想</caption>
+									<tr>
+										<td class="background2">評価</td>
+										<td>
+											<div class="radio-container">
+												<input type="radio" class="margin-left" name="evaluation" value="活用できない"
+													th:checked="${ReportData?.evaluation == '活用できない' and ReportData != null}">
+												活用できない
+												<input type="radio" class="margin-left" name="evaluation"
+													value="あまり活用できない"
+													th:checked="${ReportData?.evaluation == 'あまり活用できない' and ReportData != null}">
+												あまり活用できない
+												<input type="radio" class="margin-left" name="evaluation"
+													value="どちらでもない"
+													th:checked="${ReportData?.evaluation == 'どちらでもない' and ReportData != null}">
+												どちらでもない
+												<input type="radio" class="margin-left" name="evaluation" value="活用できる"
+													th:checked="${ReportData?.evaluation == '活用できる' and ReportData != null}">
+												活用できる
+												<input type="radio" class="margin-left" name="evaluation"
+													value="大いに活用できる"
+													th:checked="${ReportData?.evaluation == '大いに活用できる' and ReportData != null}">
+												大いに活用できる
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td class="background2">フリーコメント</td>
+										<td><textarea name="comment" cols="100" rows="4"
+												th:text="${(ReportData?.comment != null) ? ReportData.comment : ''}"
+												spellcheck="false"></textarea></td>
+									</tr>
+								</table>
+
+								<table class="table table-bordered center">
+									<tr>
+										<td class="background">項目</td>
+										<td class="background">明日から具体的にやること</td>
+										<td class="background">【本人評価】<br>実行したか<br>(○△×)</td>
+									</tr>
+									<tr>
+										<td class="background2">1</td>
+										<td><textarea name="todo1" cols="100" rows="4"
+												th:text="${(ReportData?.todo1 != null) ? ReportData.todo1 : ''}"
+												spellcheck="false"></textarea></td>
+										<td><textarea name="todid1" cols="10" rows="4"
+												th:text="${(ReportData?.todid1 != null) ? ReportData.todid1 : ''}"
+												spellcheck="false"></textarea></td>
+									</tr>
+									<tr>
+										<td class="background2">2</td>
+										<td><textarea name="todo2" cols="100" rows="4"
+												th:text="${(ReportData?.todo2 != null) ? ReportData.todo2 : ''}"
+												spellcheck="false"></textarea></td>
+										<td><textarea name="todid2" cols="10" rows="4"
+												th:text="${(ReportData?.todid2 != null) ? ReportData.todid2 : ''}"
+												spellcheck="false"></textarea></td>
+									</tr>
+									<tr>
+										<td class="background2">3</td>
+										<td><textarea name="todo3" cols="100" rows="4"
+												th:text="${(ReportData?.todo3 != null) ? ReportData.todo3 : ''}"
+												spellcheck="false"></textarea></td>
+										<td><textarea name="todid3" cols="10" rows="4"
+												th:text="${(ReportData?.todid3 != null) ? ReportData.todid3 : ''}"
+												spellcheck="false"></textarea></td>
+									</tr>
+								</table>
+
+								<p class="bottom-right">チェック予定日:<input type="date" name="check_day"
+										th:value="${(ReportData?.check_day != null) ? ReportData.check_day : ''}"
+										spellcheck="false" onkeydown="disableEnterKey(event)"></p>
+
+								<!-- ボタン表示 -->
+								<p class="bottom-left">
+									<input type="submit" name="action" class="button btn btn-info" id="save" value="保存">
+									<input type="submit" name="action" class="button btn btn-info" value="新規作成">
+									<input type="submit" formaction="/Download" class="button btn btn-success"
+										id="createExcel" value="Excel出力">
+								</p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</form>
+	</main>
+</body>
+
+</html>

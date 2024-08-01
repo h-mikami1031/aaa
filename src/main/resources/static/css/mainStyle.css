@@ -1,0 +1,91 @@
+@charset "UTF-8";
+
+table caption {
+	padding: 0.5em;
+	color: #FFF;
+	font-weight: bold;
+	text-align: center;
+	caption-side: top;
+	background:
+		linear-gradient(to bottom,
+			rgba(34, 74, 190, 1),
+			rgba(34, 74, 190, 0.7));
+	background-size: cover;
+}
+
+textarea {
+	width: 100%;
+	resize: vertical;
+	/* 垂直方向にリサイズ可能にする */
+	min-height: 50px;
+	/* 最小の高さを指定（適宜調整） */
+	box-sizing: border-box;
+}
+
+.center {
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	margin-right: auto;
+	margin-left: auto;
+	vertical-align: middle;
+}
+
+.button {
+	width: 9em;
+	height: 3em;
+	margin-right: 20px;
+	margin-top: 50px;
+}
+
+.background {
+	color: #FFF;
+	font-weight: bold;
+	background:
+		linear-gradient(to bottom,
+			rgba(34, 74, 190, 1),
+			rgba(34, 74, 190, 0.7));
+	background-size: cover;
+}
+
+.background2 {
+	color: #FFF;
+	font-weight: bold;
+	background:
+		linear-gradient(to bottom,
+			rgba(100, 149, 237, 1),
+			rgba(100, 149, 237, 0.7));
+	background-size: cover;
+}
+
+.margin-left {
+	margin-left: 30px
+}
+
+.margin-top {
+	margin-top: 30px
+}
+
+.custom-table-container {
+	max-height: 40vh;
+	/* 画面高さの25%に設定 */
+}
+
+
+.custom-table-container-tasklist {
+	max-height: 80vh;
+	/* 画面高さの25%に設定 */
+}
+
+#data-table .tablesorter-header {
+	cursor: pointer;
+	outline: none;
+}
+
+#data-table .tablesorter-header-inner::after {
+	content: '';
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 12px;
+	margin-left: 5px;
+}
